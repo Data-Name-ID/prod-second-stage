@@ -1,12 +1,13 @@
-FROM python:3.12.1-alpine3.19
-
-WORKDIR /project
-
-COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
+FROM python:3.11.7
 
 COPY . .
 
-ENV SERVER_PORT=8080
+RUN pip3 install -r requirements.txt
+
+WORKDIR /project
+
+EXPOSE 57424
+
+ENV SERVER_PORT=57424
 
 CMD ["sh", "-c", "exec python3 manage.py runserver 0.0.0.0:$SERVER_PORT"]
