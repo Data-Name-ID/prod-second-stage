@@ -20,11 +20,18 @@ class Country(django.db.models.Model):
             ),
         ],
     )
-    region = django.db.models.TextField()
+    region = django.db.models.TextField(
+        validators=[
+            django.core.validators.RegexValidator(
+                regex=r'^(Europe|Africa|Americas|Oceania|Asia)$',
+            ),
+        ],
+    )
 
     class Meta:
         db_table = 'countries'
         ordering = ('alpha2',)
+        managed = False
 
     def __str__(self):
         return self.name
