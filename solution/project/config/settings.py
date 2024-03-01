@@ -38,10 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Additional apps
     'rest_framework',
     'django_filters',
-    'countries',
-    'ping',
+    # Local apps
+    'api',
+    'api.countries',
+    'api.ping',
+    'api.users',
 ]
 
 MIDDLEWARE = [

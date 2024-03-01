@@ -11,6 +11,4 @@ ENV SERVER_ADDRESS=0.0.0.0:$SERVER_PORT
 
 EXPOSE ${SERVER_PORT}
 
-RUN exec python3 manage.py migrate
-
-CMD ["sh", "-c", "exec python3 manage.py runserver $SERVER_ADDRESS"]
+CMD ["sh", "-c", "python3 manage.py migrate && exec python3 manage.py runserver $SERVER_ADDRESS"]

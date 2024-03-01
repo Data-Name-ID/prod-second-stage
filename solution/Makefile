@@ -7,3 +7,6 @@ run:
 mig:
 	@cd project && python manage.py makemigrations
 	@cd project && python manage.py migrate
+
+su:
+	@cd project && python manage.py createsuperuser

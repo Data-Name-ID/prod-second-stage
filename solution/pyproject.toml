@@ -25,7 +25,11 @@ line-length = 79
 
 [tool.ruff.lint]
 select = ["ALL"]
-ignore = ["D", "ANN", "ARG002", "A002"]
+ignore = ["D", "ANN", "ARG002", "A002", "RUF001"]
+
+[tool.ruff.lint.per-file-ignores]
+"*/models.py" = ["N815"]
+"*/serializers.py" = ["N815"]
 
 [tool.ruff.format]
 quote-style = "single"
