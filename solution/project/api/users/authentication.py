@@ -13,17 +13,17 @@ class TokenAuthentication(rest_framework.authentication.BaseAuthentication):
         if not token or not token.startswith('Bearer '):
             return None
 
-        payload = jwt.decode(
-            token[7:],
-            django.conf.settings.SECRET_KEY,
-            algorithms='HS256',
-        )
-
         try:
+            payload = jwt.decode(
+                token[7:],
+                django.conf.settings.SECRET_KEY,
+                algorithms='HS256',
+            )
             user = api.users.models.User.objects.get(login=payload['login'])
-            user.is_authenticated = True
-        except api.users.models.User.DoesNotExist as e:
-            msg = 'Переданный токен не существует либо некорректен.'
-            raise rest_framework.exceptions.NotAuthenticated(msg) from e
+        except (
+            api.users.models.User.DoesNotExist,
+            jwt.exceptions.InvalidSignatureError,
+        ) as e:
+            raise rest_framework.exceptions.NotAuthenticated from e
 
         return (user, None)

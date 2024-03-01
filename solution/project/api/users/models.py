@@ -67,5 +67,6 @@ class User(django.db.models.Model):
     def __str__(self):
         return self.login
 
+    @property
     def is_authenticated(self):
         return True
