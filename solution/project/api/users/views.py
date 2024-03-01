@@ -1,4 +1,9 @@
+import django.conf
+import django.contrib.auth.hashers
+import django.utils.timezone
+import jwt
 import rest_framework.generics
+import rest_framework.permissions
 import rest_framework.response
 import rest_framework.status
 
@@ -58,4 +63,41 @@ class RegisterView(rest_framework.generics.CreateAPIView):
         return rest_framework.response.Response(
             {'reason': next(iter(serializer.errors.values()))},
             status=rest_framework.status.HTTP_400_BAD_REQUEST,
+        )
+
+
+class SignInView(rest_framework.views.APIView):
+    def post(self, request):
+        login = request.data.get('login')
+        password = request.data.get('password')
+
+        user = api.users.models.User.objects.filter(
+            login=login,
+        ).filter()
+
+        if not user or not django.contrib.auth.hashers.check_password(
+            password,
+            user[0].password,
+        ):
+            return rest_framework.response.Response(
+                {'reason': 'Неверный логин или пароль.'},
+                status=rest_framework.status.HTTP_401_UNAUTHORIZED,
+            )
+
+        token = jwt.encode(
+            {
+                'login': login,
+                'password': password,
+                'exp': django.utils.timezone.now()
+                + django.utils.timezone.timedelta(
+                    hours=1,
+                ),
+            },
+            django.conf.settings.SECRET_KEY,
+            algorithm='HS256',
+        )
+
+        return rest_framework.response.Response(
+            {'token': token},
+            status=rest_framework.status.HTTP_200_OK,
         )

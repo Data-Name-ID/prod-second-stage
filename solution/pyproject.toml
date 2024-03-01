@@ -12,6 +12,7 @@ django-environ = "^0.11.2"
 djangorestframework = "^3.14.0"
 django-filter = "^23.5"
 psycopg2 = "^2.9.9"
+pyjwt = "^2.8.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.2.2"
@@ -30,6 +31,7 @@ ignore = ["D", "ANN", "ARG002", "A002", "RUF001"]
 [tool.ruff.lint.per-file-ignores]
 "*/models.py" = ["N815"]
 "*/serializers.py" = ["N815"]
+"*/migrations/*.py" = ["ALL"]
 
 [tool.ruff.format]
 quote-style = "single"
