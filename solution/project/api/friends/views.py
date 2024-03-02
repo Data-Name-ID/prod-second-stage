@@ -5,8 +5,8 @@ import rest_framework.status
 import rest_framework.views
 
 import api.friends.models
-import api.friends.pagination
 import api.friends.serializers
+import api.pagination
 import api.users.models
 import api.utils
 
@@ -51,7 +51,7 @@ class FriendListView(rest_framework.generics.ListAPIView):
     http_method_names = ('get',)
     serializer_class = api.friends.serializers.FriendsSerializer
     permission_classes = (rest_framework.permissions.IsAuthenticated,)
-    pagination_class = api.friends.pagination.Pagination
+    pagination_class = api.pagination.Pagination
 
     def get_queryset(self):
         return api.friends.models.Friendship.objects.filter(

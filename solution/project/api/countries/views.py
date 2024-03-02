@@ -14,6 +14,9 @@ class CountriesViewSet(rest_framework.viewsets.ModelViewSet):
     serializer_class = api.countries.serializers.CountrySerializer
     filterset_fields = ('region',)
 
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
     @rest_framework.decorators.action(
         detail=False,
         url_path=r'(?P<alpha2>[A-Za-z]{2})',

@@ -8,7 +8,7 @@ DEFAULT_HOSTS = ['*']
 
 env = environ.Env(
     DJANGO_ALLOWED_HOSTS=(list, DEFAULT_HOSTS),
-    DJANGO_SECRET_KEY=(str, 'fake-secret-key-for-dev'),
+    RANDOM_SECRET=(str, 'fake-secret-key-for-dev'),
     DJANGO_DEBUG=(bool, False),
     POSTGRES_USERNAME=(str, 'postgres'),
     POSTGRES_PASSWORD=(str, 'postgres'),
@@ -20,7 +20,7 @@ env = environ.Env(
 environ.Env.read_env(BASE_DIR / '.env')
 
 ALLOWED_HOSTS = env('DJANGO_ALLOWED_HOSTS')
-SECRET_KEY = env('DJANGO_SECRET_KEY')
+SECRET_KEY = env('RANDOM_SECRET')
 
 DEBUG = env('DJANGO_DEBUG')
 INTERNAL_IPS = env.list('DJANGO_INTERNAL_IPS', default=ALLOWED_HOSTS)
@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'api.ping',
     'api.profiles',
     'api.users',
+    'api.posts',
 ]
 
 MIDDLEWARE = [
@@ -137,3 +138,5 @@ REST_FRAMEWORK = {
     ),
     'EXCEPTION_HANDLER': 'api.handlers.exception_handler',
 }
+
+SILENCED_SYSTEM_CHECKS = ('urls.W002',)

@@ -1,5 +1,3 @@
-import django.core.exceptions
-import django.http.response
 import rest_framework.exceptions
 import rest_framework.response
 import rest_framework.views

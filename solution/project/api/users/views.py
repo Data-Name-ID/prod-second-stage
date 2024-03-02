@@ -87,7 +87,7 @@ class SignInView(rest_framework.views.APIView):
                 'password': user[0].password,
                 'exp': django.utils.timezone.now()
                 + django.utils.timezone.timedelta(
-                    hours=1,
+                    hours=24,
                 ),
             },
             django.conf.settings.SECRET_KEY,

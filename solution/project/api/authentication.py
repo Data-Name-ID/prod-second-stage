@@ -29,7 +29,7 @@ class TokenAuthentication(rest_framework.authentication.BaseAuthentication):
                 raise rest_framework.exceptions.NotAuthenticated
         except (
             api.users.models.User.DoesNotExist,
-            jwt.exceptions.DecodeError,
+            jwt.exceptions.PyJWTError,
         ) as e:
             raise rest_framework.exceptions.NotAuthenticated from e
 
