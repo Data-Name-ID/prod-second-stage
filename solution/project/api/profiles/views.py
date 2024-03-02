@@ -8,6 +8,7 @@ import api.utils
 
 
 class ProfileView(rest_framework.views.APIView):
+    http_method_names = ('get',)
     permission_classes = (rest_framework.permissions.IsAuthenticated,)
 
     def get(self, request, login):
