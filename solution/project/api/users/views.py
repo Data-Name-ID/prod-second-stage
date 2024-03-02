@@ -41,14 +41,6 @@ class RegisterView(rest_framework.generics.CreateAPIView):
                     status=rest_framework.status.HTTP_409_CONFLICT,
                 )
 
-            if not api.utils.check_country_code(
-                request.data.get('countryCode'),
-            ):
-                return rest_framework.response.Response(
-                    {'reason': 'Некорректный код страны.'},
-                    status=rest_framework.status.HTTP_400_BAD_REQUEST,
-                )
-
             serializer.save()
 
             user_profile = {

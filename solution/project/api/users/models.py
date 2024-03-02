@@ -2,6 +2,8 @@ import django.contrib.auth.hashers
 import django.core.validators
 import django.db.models
 
+import api.friends.models
+
 
 class User(django.db.models.Model):
     login = django.db.models.CharField(
@@ -70,3 +72,20 @@ class User(django.db.models.Model):
     @property
     def is_authenticated(self):
         return True
+
+    def add_friend(self, friend_login):
+        friend = User.objects.get(login=friend_login)
+        api.friends.models.Friendship.objects.get_or_create(
+            from_user=self,
+            to_user=friend,
+        )
+
+    def remove_friend(self, friend_login):
+        friend = User.objects.get(login=friend_login)
+        friendship = api.friends.models.Friendship.objects.filter(
+            from_user=self,
+            to_user=friend,
+        )
+
+        if friendship.exists():
+            friendship.delete()

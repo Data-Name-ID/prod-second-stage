@@ -6,12 +6,12 @@ app_name = 'api.me'
 
 urlpatterns = [
     django.urls.path(
-        'profile',
+        '/profile',
         api.me.views.ProfileView.as_view(),
         name='profile',
     ),
     django.urls.path(
-        'updatePassword',
+        '/updatePassword',
         api.me.views.UpdatePasswordView.as_view(),
         name='update-password',
     ),

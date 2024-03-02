@@ -2,6 +2,7 @@ import django.contrib.auth.hashers
 import rest_framework.serializers
 
 import api.users.models
+import api.utils
 
 
 class UserSerializer(rest_framework.serializers.ModelSerializer):
@@ -48,3 +49,12 @@ class UserSerializer(rest_framework.serializers.ModelSerializer):
             validated_data['password'],
         )
         return super().create(validated_data)
+
+    def validate(self, data):
+        if not api.utils.check_country_code(
+            data.get('countryCode'),
+        ):
+            msg = 'Некорректный код страны.'
+            raise rest_framework.serializers.ValidationError(msg)
+
+        return super().validate(data)

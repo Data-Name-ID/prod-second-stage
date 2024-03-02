@@ -6,7 +6,7 @@ app_name = 'api.profiles'
 
 urlpatterns = [
     django.urls.path(
-        '<str:login>',
+        '/<str:login>',
         api.me.views.ProfileView.as_view(),
         name='profile',
     ),
