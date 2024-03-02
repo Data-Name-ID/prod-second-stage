@@ -10,8 +10,11 @@ class TokenAuthentication(rest_framework.authentication.BaseAuthentication):
     def authenticate(self, request):
         token = request.headers.get('Authorization')
 
-        if not token or not token.startswith('Bearer '):
+        if not token:
             return None
+
+        if not token.startswith('Bearer '):
+            raise rest_framework.exceptions.NotAuthenticated
 
         try:
             payload = jwt.decode(
@@ -19,10 +22,14 @@ class TokenAuthentication(rest_framework.authentication.BaseAuthentication):
                 django.conf.settings.SECRET_KEY,
                 algorithms='HS256',
             )
+
             user = api.users.models.User.objects.get(login=payload['login'])
+
+            if payload['password'] != user.password:
+                raise rest_framework.exceptions.NotAuthenticated
         except (
             api.users.models.User.DoesNotExist,
-            jwt.exceptions.InvalidSignatureError,
+            jwt.exceptions.DecodeError,
         ) as e:
             raise rest_framework.exceptions.NotAuthenticated from e
 

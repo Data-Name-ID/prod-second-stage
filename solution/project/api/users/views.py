@@ -9,11 +9,11 @@ import rest_framework.status
 
 import api.users.models
 import api.users.serializers
+import api.utils
 
 
 class RegisterView(rest_framework.generics.CreateAPIView):
     http_method_names = ('post',)
-
     serializer_class = api.users.serializers.UserSerializer
 
     def post(self, request, *args, **kwargs):
@@ -22,13 +22,13 @@ class RegisterView(rest_framework.generics.CreateAPIView):
         if serializer.is_valid():
             if (
                 api.users.models.User.objects.filter(
-                    email=request.data['email'],
+                    email=request.data.get('email'),
                 ).exists()
                 or api.users.models.User.objects.filter(
-                    phone=request.data['phone'],
+                    phone=request.data.get('phone'),
                 ).exists()
                 or api.users.models.User.objects.filter(
-                    login=request.data['login'],
+                    login=request.data.get('login'),
                 ).exists()
             ):
                 return rest_framework.response.Response(
@@ -39,6 +39,14 @@ class RegisterView(rest_framework.generics.CreateAPIView):
                         ),
                     },
                     status=rest_framework.status.HTTP_409_CONFLICT,
+                )
+
+            if not api.utils.check_country_code(
+                request.data.get('countryCode'),
+            ):
+                return rest_framework.response.Response(
+                    {'reason': 'Некорректный код страны.'},
+                    status=rest_framework.status.HTTP_400_BAD_REQUEST,
                 )
 
             serializer.save()
@@ -60,10 +68,7 @@ class RegisterView(rest_framework.generics.CreateAPIView):
                 status=rest_framework.status.HTTP_201_CREATED,
             )
 
-        return rest_framework.response.Response(
-            {'reason': next(iter(serializer.errors.values()))},
-            status=rest_framework.status.HTTP_400_BAD_REQUEST,
-        )
+        return api.utils.get_error_response(serializer)
 
 
 class SignInView(rest_framework.views.APIView):
@@ -87,7 +92,7 @@ class SignInView(rest_framework.views.APIView):
         token = jwt.encode(
             {
                 'login': login,
-                'password': password,
+                'password': user[0].password,
                 'exp': django.utils.timezone.now()
                 + django.utils.timezone.timedelta(
                     hours=1,

@@ -16,6 +16,7 @@ pyjwt = "^2.8.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.2.2"
+requests = "^2.31.0"
 
 [build-system]
 requires = ["poetry-core"]

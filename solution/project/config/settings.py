@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     # Local apps
     'api',
     'api.countries',
+    'api.me',
     'api.ping',
     'api.users',
 ]

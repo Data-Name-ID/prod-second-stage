@@ -4,6 +4,7 @@ import rest_framework.routers
 import api.countries.views
 import api.me.urls
 import api.ping.views
+import api.profiles.urls
 import api.users.urls
 
 app_name = 'api'
@@ -16,4 +17,5 @@ urlpatterns = [
     django.urls.path('auth/', django.urls.include(api.users.urls)),
     django.urls.path('ping', api.ping.views.PingView.as_view()),
     django.urls.path('me/', django.urls.include(api.me.urls)),
+    django.urls.path('profile/', django.urls.include(api.profiles.urls)),
 ]
