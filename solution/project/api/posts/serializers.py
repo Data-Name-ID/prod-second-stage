@@ -19,8 +19,8 @@ class PostSerializer(rest_framework.serializers.ModelSerializer):
             'id',
             'content',
             'author',
-            'createdAt',
             'tags',
+            'createdAt',
             'likesCount',
             'dislikesCount',
         )
