@@ -20,10 +20,11 @@ class AddFriendView(rest_framework.views.APIView):
             api.users.models.User.objects.filter(
                 login=request.data.get('login'),
             )
-            .exclude(id=request.user.id)
             .exists()
         ):
-            request.user.add_friend(request.data.get('login'))
+            if request.data.get('login') != request.user.login:
+                request.user.add_friend(request.data.get('login'))
+
             return rest_framework.response.Response(
                 {'status': 'ok'},
                 status=rest_framework.status.HTTP_200_OK,

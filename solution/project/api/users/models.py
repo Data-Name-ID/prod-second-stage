@@ -19,9 +19,13 @@ class User(django.db.models.Model):
             ),
         ],
     )
-    email = django.db.models.CharField('Электронная почта', max_length=50)
+    email = django.db.models.CharField(
+        'Электронная почта',
+        max_length=50,
+    )
     password = django.db.models.CharField(
         'Пароль',
+        max_length=100,
         validators=[
             django.core.validators.RegexValidator(
                 regex=r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,100}$',

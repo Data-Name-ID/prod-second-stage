@@ -9,17 +9,16 @@ class PostSerializer(rest_framework.serializers.ModelSerializer):
     class Meta:
         model = api.posts.models.Post
         fields = ('id', 'content', 'author', 'createdAt', 'tags')
-        read_only_fields = ('id', 'author', 'createdAt', 'tags')
-        depth = 1
-
-    def get_tags(self, instance):
-        return [tag.name for tag in instance.tags.all()]
+        read_only_fields = ('id', 'author', 'createdAt')
 
     def create(self, validated_data):
         return api.posts.models.Post.objects.create(
             **validated_data,
             author=self.context['request'].user,
         )
+
+    def get_tags(self, instance):
+        return [tag.name for tag in instance.tags.all()]
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)

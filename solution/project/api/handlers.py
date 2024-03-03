@@ -10,4 +10,9 @@ def exception_handler(exc, context):
             status=401,
         )
 
-    return rest_framework.views.exception_handler(exc, context)
+    response = rest_framework.views.exception_handler(exc, context)
+
+    if response:
+        response.data = {'reason': str(response.data)}
+
+    return response

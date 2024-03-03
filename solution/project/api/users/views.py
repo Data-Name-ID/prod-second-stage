@@ -68,9 +68,7 @@ class SignInView(rest_framework.views.APIView):
         login = request.data.get('login')
         password = request.data.get('password')
 
-        user = api.users.models.User.objects.filter(
-            login=login,
-        ).filter()
+        user = api.users.models.User.objects.filter(login=login)
 
         if not user or not django.contrib.auth.hashers.check_password(
             password,
@@ -87,7 +85,7 @@ class SignInView(rest_framework.views.APIView):
                 'password': user[0].password,
                 'exp': django.utils.timezone.now()
                 + django.utils.timezone.timedelta(
-                    hours=24,
+                    hours=7,
                 ),
             },
             django.conf.settings.SECRET_KEY,

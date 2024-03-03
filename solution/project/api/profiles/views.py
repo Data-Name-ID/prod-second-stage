@@ -3,6 +3,7 @@ import rest_framework.response
 import rest_framework.status
 import rest_framework.views
 
+import api.friends.models
 import api.users.models
 import api.utils
 
@@ -21,8 +22,13 @@ class ProfileView(rest_framework.views.APIView):
             )
 
         if (
-            not profile.isPublic and profile.login == request.user.login
-        ):  # and not request.user.is_friends_with(profile.user):
+            not profile.isPublic
+            and profile.login == request.user.login
+            and api.friends.models.Friendship.objects.filter(
+                from_user=profile,
+                to_user=request.user,
+            )
+        ):
             return rest_framework.response.Response(
                 {'reason': 'У вас нет доступа к запрашиваемому профилю.'},
                 status=rest_framework.status.HTTP_403_FORBIDDEN,

@@ -10,4 +10,19 @@ urlpatterns = [
         api.posts.views.AddPostView.as_view(),
         name='add',
     ),
+    django.urls.path(
+        '/<str:post_id>',
+        api.posts.views.PostDetailView.as_view(),
+        name='detail',
+    ),
+    django.urls.path(
+        '/feed/my',
+        api.posts.views.MyPostsView.as_view(),
+        name='my-posts',
+    ),
+    django.urls.path(
+        '/feed/<str:login>',
+        api.posts.views.UserPostsView.as_view(),
+        name='user-posts',
+    ),
 ]

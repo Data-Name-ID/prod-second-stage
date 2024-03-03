@@ -22,6 +22,7 @@ class ProfileView(rest_framework.views.APIView):
             request.user,
             data=request.data,
             partial=True,
+            fields=('phone', 'countryCode', 'isPublic', 'image'),
         )
         if serializer.is_valid():
             if (

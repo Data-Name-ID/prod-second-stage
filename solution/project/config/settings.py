@@ -82,16 +82,24 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': POSTGRES_DATABASE,
-        'USER': POSTGRES_USERNAME,
-        'PASSWORD': POSTGRES_PASSWORD,
-        'HOST': POSTGRES_HOST,
-        'PORT': POSTGRES_PORT,
-    },
-}
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        },
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': POSTGRES_DATABASE,
+            'USER': POSTGRES_USERNAME,
+            'PASSWORD': POSTGRES_PASSWORD,
+            'HOST': POSTGRES_HOST,
+            'PORT': POSTGRES_PORT,
+        },
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -137,6 +145,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ),
     'EXCEPTION_HANDLER': 'api.handlers.exception_handler',
+    'DATETIME_FORMAT': '%Y-%m-%dT%H:%M:%SZ',
 }
 
 SILENCED_SYSTEM_CHECKS = ('urls.W002',)
