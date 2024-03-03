@@ -29,6 +29,16 @@ class Post(django.db.models.Model):
         related_name='posts',
     )
     createdAt = django.db.models.DateTimeField(auto_now_add=True)
+    likes = django.db.models.ManyToManyField(
+        api.users.models.User,
+        related_name='liked_posts',
+        blank=True,
+    )
+    dislikes = django.db.models.ManyToManyField(
+        api.users.models.User,
+        related_name='disliked_posts',
+        blank=True,
+    )
 
     class Meta:
         db_table = 'posts'
@@ -36,49 +46,3 @@ class Post(django.db.models.Model):
 
     def __str__(self):
         return self.content[:50]
-
-
-class PostLike(django.db.models.Model):
-    post = django.db.models.ForeignKey(
-        Post,
-        on_delete=django.db.models.CASCADE,
-        related_name='likes',
-    )
-    user = django.db.models.ForeignKey(
-        api.users.models.User,
-        on_delete=django.db.models.CASCADE,
-        related_name='likes',
-    )
-
-    class Meta:
-        db_table = 'post_likes'
-        unique_together = (
-            'post',
-            'user',
-        )
-
-    def __str__(self):
-        return self.post
-
-
-class PostDislike(django.db.models.Model):
-    post = django.db.models.ForeignKey(
-        Post,
-        on_delete=django.db.models.CASCADE,
-        related_name='dislikes',
-    )
-    user = django.db.models.ForeignKey(
-        api.users.models.User,
-        on_delete=django.db.models.CASCADE,
-        related_name='dislikes',
-    )
-
-    class Meta:
-        db_table = 'post_dislikes'
-        unique_together = (
-            'post',
-            'user',
-        )
-
-    def __str__(self):
-        return self.post

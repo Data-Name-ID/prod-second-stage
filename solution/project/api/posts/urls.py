@@ -6,9 +6,9 @@ app_name = 'api.posts'
 
 urlpatterns = [
     django.urls.path(
-        '/add',
+        '/new',
         api.posts.views.AddPostView.as_view(),
-        name='add',
+        name='new',
     ),
     django.urls.path(
         '/<str:post_id>',
@@ -24,5 +24,15 @@ urlpatterns = [
         '/feed/<str:login>',
         api.posts.views.UserPostsView.as_view(),
         name='user-posts',
+    ),
+    django.urls.path(
+        '/<str:post_id>/like',
+        api.posts.views.LikePostView.as_view(),
+        name='list',
+    ),
+    django.urls.path(
+        '/<str:post_id>/dislike',
+        api.posts.views.DislikePostView.as_view(),
+        name='list',
     ),
 ]

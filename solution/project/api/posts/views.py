@@ -92,3 +92,60 @@ class UserPostsView(rest_framework.generics.ListAPIView):
 
         msg = 'Пользователь не найден либо к нему нет доступа..'
         raise rest_framework.exceptions.NotFound(msg)
+
+
+class LikePostView(rest_framework.views.APIView):
+    http_method_names = ('post',)
+    permission_classes = (rest_framework.permissions.IsAuthenticated,)
+
+    def post(self, request, post_id):
+        post = api.posts.models.Post.objects.get(id=post_id)
+
+        if (
+            post.author.isPublic
+            or post.author == self.request.user
+            or api.friends.models.Friendship.objects.filter(
+                from_user=post.author,
+                to_user=self.request.user,
+            ).exists()
+        ):
+            post.likes.add(request.user)
+            post.dislikes.remove(request.user)
+
+            return rest_framework.response.Response(
+                api.posts.serializers.PostSerializer(post).data,
+                status=rest_framework.status.HTTP_200_OK,
+            )
+
+        return rest_framework.response.Response(
+            {'reason': 'Указанный пост не найден либо к нему нет доступа.'},
+            status=rest_framework.status.HTTP_404_NOT_FOUND,
+        )
+
+
+class DislikePostView(rest_framework.views.APIView):
+    http_method_names = ('post',)
+    permission_classes = (rest_framework.permissions.IsAuthenticated,)
+
+    def post(self, request, post_id):
+        post = api.posts.models.Post.objects.get(id=post_id)
+
+        if (
+            post.author.isPublic
+            or post.author == self.request.user
+            or api.friends.models.Friendship.objects.filter(
+                from_user=post.author,
+                to_user=self.request.user,
+            ).exists()
+        ):
+            post.dislikes.add(request.user)
+            post.likes.remove(request.user)
+            return rest_framework.response.Response(
+                api.posts.serializers.PostSerializer(post).data,
+                status=rest_framework.status.HTTP_200_OK,
+            )
+
+        return rest_framework.response.Response(
+            {'reason': 'Указанный пост не найден либо к нему нет доступа.'},
+            status=rest_framework.status.HTTP_404_NOT_FOUND,
+        )
