@@ -1,3 +1,4 @@
+import django.core.exceptions
 import rest_framework.exceptions
 import rest_framework.permissions
 import rest_framework.response
@@ -107,7 +108,10 @@ class LikePostView(rest_framework.views.APIView):
     def post(self, request, post_id):
         try:
             post = api.posts.models.Post.objects.get(id=post_id)
-        except api.posts.models.Post.DoesNotExist:
+        except (
+            api.posts.models.Post.DoesNotExist,
+            django.core.exceptions.ValidationError,
+        ):
             msg = 'Указанный пост не найден либо к нему нет доступа.'
             return rest_framework.response.Response(
                 {'reason': msg},
@@ -143,7 +147,10 @@ class DislikePostView(rest_framework.views.APIView):
     def post(self, request, post_id):
         try:
             post = api.posts.models.Post.objects.get(id=post_id)
-        except api.posts.models.Post.DoesNotExist:
+        except (
+            api.posts.models.Post.DoesNotExist,
+            django.core.exceptions.ValidationError,
+        ):
             msg = 'Указанный пост не найден либо к нему нет доступа.'
             return rest_framework.response.Response(
                 {'reason': msg},
