@@ -1,13 +1,13 @@
 import django.urls
 
-import api.me.views
+import api.profiles.views
 
 app_name = 'api.profiles'
 
 urlpatterns = [
     django.urls.path(
         '/<str:login>',
-        api.me.views.ProfileView.as_view(),
+        api.profiles.views.ProfileView.as_view(),
         name='profile',
     ),
 ]

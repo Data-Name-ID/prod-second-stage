@@ -8,13 +8,14 @@ import api.utils
 class UserSerializer(rest_framework.serializers.ModelSerializer):
     class Meta:
         model = api.users.models.User
-        fields = '__all__'
+        exclude = ('id',)
         extra_kwargs = {  # noqa: RUF012
             'password': {
                 'error_messages': {
                     'required': 'Поле пароля является обязательным.',
                     'null': 'Поле пароля не может быть пустым.',
                 },
+                'write_only': True,
             },
             'email': {
                 'error_messages': {

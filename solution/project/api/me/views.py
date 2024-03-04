@@ -18,11 +18,10 @@ class ProfileView(rest_framework.views.APIView):
         return api.utils.get_profile_response(request)
 
     def patch(self, request):
-        serializer = api.users.serializers.UserSerializer(
+        serializer = api.me.serializers.UserSerializer(
             request.user,
             data=request.data,
             partial=True,
-            fields=('phone', 'countryCode', 'isPublic', 'image'),
         )
         if serializer.is_valid():
             if (

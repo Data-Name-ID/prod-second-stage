@@ -19,7 +19,7 @@ urlpatterns = [
     django.urls.path('auth', django.urls.include(api.users.urls)),
     django.urls.path('ping', api.ping.views.PingView.as_view()),
     django.urls.path('me', django.urls.include(api.me.urls)),
-    django.urls.path('profile', django.urls.include(api.profiles.urls)),
+    django.urls.path('profiles', django.urls.include(api.profiles.urls)),
     django.urls.path('friends', django.urls.include(api.friends.urls)),
     django.urls.path('posts', django.urls.include(api.posts.urls)),
 ]

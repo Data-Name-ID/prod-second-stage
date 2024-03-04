@@ -19,6 +19,25 @@ class CountriesViewSet(rest_framework.viewsets.ModelViewSet):
     def list(self, request):
         regions = request.GET.getlist('region')
 
+        if not regions or regions == ['']:
+            return rest_framework.response.Response(
+                self.get_serializer(self.queryset, many=True).data,
+                status=rest_framework.status.HTTP_200_OK,
+            )
+
+        for region in regions:
+            if region not in (
+                'Europe',
+                'Africa',
+                'Americas',
+                'Oceania',
+                'Asia',
+            ):
+                return rest_framework.response.Response(
+                    {'reason': 'Регион не найден.'},
+                    status=rest_framework.status.HTTP_400_BAD_REQUEST,
+                )
+
         combined_filter = django.db.models.Q()
         for region in regions:
             combined_filter |= django.db.models.Q(region=region)
