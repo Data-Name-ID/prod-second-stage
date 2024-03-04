@@ -88,7 +88,13 @@ class UserPostsView(rest_framework.generics.ListAPIView):
             from_user=user,
             to_user=self.request.user,
         ).exists():
-            return api.posts.models.Post.objects.filter(author__login=login)
+            queryset = api.posts.models.Post.objects.filter(author=user)
+
+            serializer = self.get_serializer(queryset, many=True)
+            return rest_framework.response.Response(
+                serializer.data,
+                status=rest_framework.status.HTTP_200_OK,
+            )
 
         msg = 'Пользователь не найден либо к нему нет доступа..'
         raise rest_framework.exceptions.NotFound(msg)
@@ -99,7 +105,14 @@ class LikePostView(rest_framework.views.APIView):
     permission_classes = (rest_framework.permissions.IsAuthenticated,)
 
     def post(self, request, post_id):
-        post = api.posts.models.Post.objects.get(id=post_id)
+        try:
+            post = api.posts.models.Post.objects.get(id=post_id)
+        except api.posts.models.Post.DoesNotExist:
+            msg = 'Указанный пост не найден либо к нему нет доступа.'
+            return rest_framework.response.Response(
+                {'reason': msg},
+                status=rest_framework.status.HTTP_404_NOT_FOUND,
+            )
 
         if (
             post.author.isPublic
@@ -128,7 +141,14 @@ class DislikePostView(rest_framework.views.APIView):
     permission_classes = (rest_framework.permissions.IsAuthenticated,)
 
     def post(self, request, post_id):
-        post = api.posts.models.Post.objects.get(id=post_id)
+        try:
+            post = api.posts.models.Post.objects.get(id=post_id)
+        except api.posts.models.Post.DoesNotExist:
+            msg = 'Указанный пост не найден либо к нему нет доступа.'
+            return rest_framework.response.Response(
+                {'reason': msg},
+                status=rest_framework.status.HTTP_404_NOT_FOUND,
+            )
 
         if (
             post.author.isPublic
